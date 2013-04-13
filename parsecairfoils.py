@@ -1,17 +1,12 @@
-# title: 
-# parsec airfoils
+# Generate and plot the contour of an airfoil 
+# using the PARSEC parameterization
 
-# purpose:
-# 
-
-# repository:
-# http://github.com/dqsis/xxx
-
+# Repository & documentation:
+# http://github.com/dqsis/parsec-airfoils
 # -------------------------------------
 
-# START +++
 
-# import libraries
+# Import libraries
 from __future__ import division
 import os
 from sys import exit
@@ -21,56 +16,61 @@ import matplotlib.pyplot as plt
 
 import parseccoef as pc
 
-# i/o files path
+
+# I/O files path
 path = 'data/'
 
-# read PARSEC parameters
-pp = 'parsec_parameters.csv'
-pparray = np.genfromtxt(os.path.join(path,pp), delimiter=';', dtype = float, skiprows=1)
 
-# 'normalized' airfoil (chord = 1)
+# Read parsec parameters (user input) & assign to array
+pp = 'parsec_parameters.csv'
+pparray = np.genfromtxt(os.path.join(path,pp), delimiter=';', 
+                        dtype = float, skiprows=1)
+
+
+# TE & LE of airfoil (normalized, chord = 1)
 xle = 0.0
 yle = 0.0
 xte = 1.0
 yte = 0.0
 
-# leading edge
+# LE radius
 rle = pparray[0]
 
-# pressure side (down)
+# Pressure (lower) surface parameters 
 x_pre = pparray[1]
 y_pre = pparray[2]
 d2ydx2_pre = pparray[3]
 th_pre = pparray[4]
 
-# suction side (up)
+# Suction (upper) surface parameters
 x_suc = pparray[5]
 y_suc = pparray[6]
 d2ydx2_suc = pparray[7]
 th_suc = pparray[8]
 
-# evaluate pressure (lower) surface parsec coefficients
+
+# Evaluate pressure (lower) surface coefficients
 cf_pre = pc.pcoef(xte,yte,rle,
                   x_pre,y_pre,d2ydx2_pre,th_pre,
                   'pre')
 
-# evaluate suction (upper) surface parsec coefficients
+# Evaluate suction (upper) surface coefficients
 cf_suc = pc.pcoef(xte,yte,rle,
                   x_suc,y_suc,d2ydx2_suc,th_suc,
                   'suc')
 
-# pressure (lower) surface points
+
+# Evaluate pressure (lower) surface points
 xx_pre = np.linspace(xte,xle,101)
 yy_pre = (cf_pre[0]*xx_pre**(1/2) + 
           cf_pre[1]*xx_pre**(3/2) + 
           cf_pre[2]*xx_pre**(5/2) + 
           cf_pre[3]*xx_pre**(7/2) + 
           cf_pre[4]*xx_pre**(9/2) + 
-          cf_pre[5]*xx_pre**(11/2) 
+          cf_pre[5]*xx_pre**(11/2)
          ) 
-         
 
-# suction (upper) surface points
+# Evaluate suction (upper) surface points
 xx_suc = np.linspace(xle,xte,101)
 yy_suc = (cf_suc[0]*xx_suc**(1/2) + 
           cf_suc[1]*xx_suc**(3/2) + 
@@ -80,21 +80,21 @@ yy_suc = (cf_suc[0]*xx_suc**(1/2) +
           cf_suc[5]*xx_suc**(11/2)
          ) 
          
-# plots
+         
+# Plot airfoil contour
 plt.figure()
 
-# age vs weight
-plt.plot(\
-xx_suc,yy_suc,'r--',
-xx_pre,yy_pre,'b--')
+plt.plot(xx_suc,yy_suc,'r--',
+         xx_pre,yy_pre,'b--'
+        )
 
 plt.grid(True)
 plt.xlim([0,1])
+plt.yticks([])
+plt.xticks(np.arange(0,1.1,0.1))
 
-# show graphs
+# Show & save graphs
 plt.show()
 
 plt.savefig(os.path.join(path,'parsec_airfoil.pdf'))
 plt.savefig(os.path.join(path,'parsec_airfoil.png'))
-
-# END +++

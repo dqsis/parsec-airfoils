@@ -1,17 +1,66 @@
-Leading and trailing edge coordinates
-xle = 0.0       
-yle = 0.0       
-xte = 1.0       
-yte = 0.0       
-                
-rle: Leading edge radius
-                                
-x_pre: x-location of minimum point on the lower (pressure) surface
-y_pre: y-location of minimum point on the lower (pressure) surface
-d2ydx2_pre: 2nd derivative at the location of the minimum point on the lower (pressure) surface
-th_pre: Trailing edge angle between the lower (pressure) surface and the horizontal axis
-                                                
-x_suc: x-location of maximum [Y] point on the upper (suction) surface
-y_suc: y-location of maximum [Y] point on the upper (suction) surface
-d2ydx2_suc: 2nd derivative at the location of the maximum [Y] point on the upper (suction) surface
-th_suc: Trailing edge angle between the upper (suction) surface and the horizontal axis
+parsecairfoils.py
+=================
+
+
+What is it
+----------
+`parsecairfoils.py` is a python script that generates and plots the contour of an airfoil using the *PARSEC* parameterization. 
+
+PARSEC is a common method for airfoil parameterization. 
+It has the advantange of strict control over important aerodynamic features, and it allows independent control over the airfoil geometry for imposing shape constraints. 
+More on the PARSEC parameterization can be found in the following article:
+[H. Sobieczky, *'Parametric airfoils and wings'* in *Notes on Numerical Fluid Mechanics*, Vol. 68, pp 71-88](www.as.dlr.de/hs/h-pdf/H141.pdf) 
+
+
+Main features
+-------------
+
+The script, using as input data the following *11* airfoil geometric characteristics:
+
+* leading edge radius (r_LE)
+* pressure and suction surface crest locations (x_pre, y_pre, x_suc, y_suc)
+* curvatures at the pressure and suction surface crest locations (d2y/dx2_pre, d2y/dx2_suc)
+* trailing edge coordinates (x_TE, y_TE)
+* Trailing edge angles between the pressure and suction surface and the horizontal axis (th_pre, th_suc)
+
+generates and plots the contour of an airfoil - as shown in [this example](https://github.com/dqsis/parsec-airfoils/blob/master/data/parsec_airfoil.png). 
+ 
+
+Where to get it
+---------------
+
+The source code is hosted on GitHub at: [http://github.com/dqsis/parsec-airfoils](http://github.com/dqsis/parsec-airfoils).
+
+
+Dependencies
+------------
+
+* [NumPy](http://www.numpy.org) - for array objects and mathematical operations
+* [matplotlib](http://matplotlib.org) - for plots
+
+
+Documentation
+-------------
+
+The only input required by `parsecairfoils.py` are the 11 PARSEC parameters (found in the file [data/parsec_parameters.csv](http://github.com/dqsis/parsec-airfoils/blob/master/data/parsec_parameters.csv)).
+Note that `parsecairfoils.py` uses additionally the module `parseccoef.py` which contains the user function *pcoef*. 
+`pcoef` formulates and solve the system that generates the coefficients of the PARSEC polynomial.  
+
+
+Discussion and development
+--------------------------
+
+Currently, the script is considered complete. No additional development ideas. 
+
+
+Licence
+-------
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US).
+
+
+Contact
+-------
+
+[Mail](http://dqsis.com/contact/)
+[Twitter (@dqsis)](http://twitter.com/dqsis)
