@@ -9,12 +9,12 @@
 # Import libraries
 from __future__ import division
 import os
-from sys import exit
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 import parseccoef as pc
+import parsecexport
 
 
 # I/O files path
@@ -78,23 +78,41 @@ yy_suc = (cf_suc[0]*xx_suc**(1/2) +
           cf_suc[3]*xx_suc**(7/2) + 
           cf_suc[4]*xx_suc**(9/2) + 
           cf_suc[5]*xx_suc**(11/2)
-         ) 
-         
+         )
+
+# Use parsecexport to save coordinate file
+fpath = os.path.join(path, 'parsec_airfoil.dat')
+# with ... as ... only opens the file for the block it executes, then closes it
+with open(fpath, 'w') as f:
+    plain_coords = parsecexport.ppointsplain(cf_pre, cf_suc, 121, xte=xte)
+    f.write(plain_coords)
          
 # Plot airfoil contour
 plt.figure()
 
-plt.plot(xx_suc,yy_suc,'r--',
-         xx_pre,yy_pre,'b--'
-        )
+plt.plot(xx_suc,yy_suc,'r',
+         xx_pre,yy_pre,'b', linewidth=2)
 
 plt.grid(True)
 plt.xlim([0,1])
-plt.yticks([])
+#plt.yticks([])
 plt.xticks(np.arange(0,1.1,0.1))
+plt.gca().axis('equal')
 
-# Show & save graphs
-plt.show()
+# Some magic with strings
+with open(os.path.join(path,pp), 'r') as f:
+    parnames = f.readline().split(';')
+    parvals  = f.readline().split(';')
+    parnv = ["{}={}".format(n, v).replace('\n', '')
+             for n,v in zip(parnames, parvals)]
+    parnv = [', '.join(parnv[:5]), ', '.join(parnv[5:])]
+plt.title("PARSEC airfoil with parameters:\n{}\n{}"
+          .format(parnv[0],parnv[1]))
+# Make room for title automatically
+plt.tight_layout()
 
 plt.savefig(os.path.join(path,'parsec_airfoil.pdf'))
 plt.savefig(os.path.join(path,'parsec_airfoil.png'))
+
+# Show & save graphs
+plt.show()
