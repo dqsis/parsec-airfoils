@@ -24,7 +24,7 @@ The script, using as input data the following *11* airfoil geometric characteris
 * trailing edge angles between the pressure and suction surface and the horizontal axis (th_pre, th_suc)
 
 Generates and plots the contour of an airfoil - as shown in [this example](https://github.com/dqsis/parsec-airfoils/blob/master/data/parsec_airfoil.png). 
-Is also able to export the airfoil's coordinates.
+Is also able to export the airfoil's coordinates, as shown in [this plain coordinate file](https://github.com/dqsis/parsec-airfoils/blob/master/data/parsec_airfoil.dat).
 
 
 Where to get it
