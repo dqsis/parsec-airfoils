@@ -9,12 +9,12 @@
 # Import libraries
 from __future__ import division
 import os
-from sys import exit
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 import parseccoef as pc
+import parsecexport
 
 
 # I/O files path
@@ -78,14 +78,20 @@ yy_suc = (cf_suc[0]*xx_suc**(1/2) +
           cf_suc[3]*xx_suc**(7/2) + 
           cf_suc[4]*xx_suc**(9/2) + 
           cf_suc[5]*xx_suc**(11/2)
-         ) 
-         
+         )
+
+# Use parsecexport to save coordinate file
+fpath = os.path.join(path, 'parsec_airfoil.dat')
+# with ... as ... executes the block, then closes file
+with open(fpath, 'w') as f:
+    plain_coords = parsecexport.ppointsplain(cf_pre, cf_suc, 121, xte=xte)
+    f.write(plain_coords)
          
 # Plot airfoil contour
 plt.figure()
 
-plt.plot(xx_suc,yy_suc,'r--',
-         xx_pre,yy_pre,'b--'
+plt.plot(xx_suc,yy_suc,'ro--',
+         xx_pre,yy_pre,'bo--'
         )
 
 plt.grid(True)
